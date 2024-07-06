@@ -1,0 +1,5 @@
+{
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "compilerOptions": { "noEmit": true },
+  "files": [".vitepress/config.ts", "eslint.config.js", "prettier.config.js"]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "viell.dev",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "lint": "run-s lint:eslint lint:prettier",
+    "lint:eslint": "eslint --fix .",
+    "lint:prettier": "prettier . --write --log-level=warn --cache --cache-location=.cache/prettier.json"
+  },
+  "packageManager": "yarn@4.3.1",
+  "devDependencies": {
+    "@eslint/js": "^8.56.0",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20.14.10",
+    "eslint": "^8.56.0",
+    "npm-run-all2": "^6.2.2",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^7.15.0",
+    "vitepress": "^1.2.3",
+    "vue": "^3.4.31"
+  }
+}
