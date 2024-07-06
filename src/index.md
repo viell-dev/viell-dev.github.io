@@ -9,7 +9,7 @@ hero:
   text: "A glitch in the matrix"
   tagline: "any/all"
   image:
-    src: ./assets/avatar.gif
+    src: /avatar.gif
     alt: avatar
 ---
 
