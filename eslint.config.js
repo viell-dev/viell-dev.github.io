@@ -16,15 +16,13 @@ const config = ts.config(
   },
   {
     ignores: [
-      ".yarn/*",
-      ".pnp.*",
+      "node_modules",
       ".vscode/*",
       "!.vscode/settings.json",
       "!.vscode/tasks.json",
       "!.vscode/launch.json",
       "!.vscode/extensions.json",
       "!.vscode/*.code-snippets",
-      ".cache",
       ".vitepress/cache",
       ".vitepress/dist",
     ],
