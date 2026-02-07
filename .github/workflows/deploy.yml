@@ -29,19 +29,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Enable corepack
-        run: corepack enable
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: yarn
+          node-version-file: ".nvmrc"
+          cache: pnpm
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install
       - name: Build with VitePress
-        run: yarn build
+        run: pnpm build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
