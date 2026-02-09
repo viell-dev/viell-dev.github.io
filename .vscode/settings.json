@@ -8,5 +8,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit",
     "source.fixAll": "explicit"
-  }
+  },
+  "cSpell.words": ["foodstore", "frontends", "viell"]
 }
