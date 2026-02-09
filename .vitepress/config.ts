@@ -11,6 +11,7 @@ const config = defineConfig({
   appearance: "force-dark",
   themeConfig: {
     siteTitle: "viell.dev",
+    nav: [{ text: "Hire Me", link: "/hire-me" }],
     socialLinks: [
       {
         icon: "discord",
