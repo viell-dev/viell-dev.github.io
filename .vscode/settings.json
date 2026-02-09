@@ -9,5 +9,12 @@
     "source.organizeImports": "explicit",
     "source.fixAll": "explicit"
   },
-  "cSpell.words": ["foodstore", "frontends", "viell"]
+  "cSpell.words": ["foodstore", "frontends", "viell"],
+  "cSpell.ignoreWords": [
+    "Baiduspider",
+    "Bingbot",
+    "Googlebot",
+    "Kagi",
+    "Qwantbot"
+  ]
 }
