@@ -72,7 +72,7 @@ Have a project or issue backlog that needs attention? Reach out:
 
 - **Email**: [me@viell.dev](mailto:me@viell.dev)
 - **GitHub**: [viell-dev](https://github.com/viell-dev)
-- **Discord**: [viell-dev](https://discordapp.com/users/310798899738574849)
+- **Discord**: [viell-dev](https://discord.com/users/310798899738574849)
 - **X**: [@viell88](https://x.com/viell88)
 
 <small>Last updated: February 2026</small>

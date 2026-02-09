@@ -15,7 +15,7 @@ const config = defineConfig({
     socialLinks: [
       {
         icon: "discord",
-        link: "https://discordapp.com/users/310798899738574849",
+        link: "https://discord.com/users/310798899738574849",
       },
       { icon: "x", link: "https://x.com/viell88" },
       { icon: "github", link: "https://github.com/viell-dev" },
