@@ -8,3 +8,4 @@ pnpm-lock.yaml
 !.vscode/*.code-snippets
 .vitepress/cache
 .vitepress/dist
+.vitepress/.temp
