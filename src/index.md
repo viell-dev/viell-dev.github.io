@@ -15,6 +15,9 @@ hero:
     - theme: brand
       text: Hire Me
       link: /hire-me
+    - theme: alt
+      text: Blog
+      link: /blog/
 ---
 
 # About me
