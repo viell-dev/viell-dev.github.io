@@ -8,10 +8,11 @@ const config = defineConfig({
   lang: "en-GB",
   cleanUrls: true,
   srcDir: "./src",
-  appearance: "force-dark",
+  appearance: "dark",
   themeConfig: {
     siteTitle: "viell.dev",
     nav: [
+      { text: "Blog", link: "/blog/" },
       { text: "Portfolio", link: "/portfolio" },
       { text: "Hire Me", link: "/hire-me" },
     ],
@@ -20,7 +21,6 @@ const config = defineConfig({
         icon: "discord",
         link: "https://discord.com/users/310798899738574849",
       },
-      { icon: "x", link: "https://x.com/viell88" },
       { icon: "github", link: "https://github.com/viell-dev" },
     ],
   },

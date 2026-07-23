@@ -71,6 +71,5 @@ maintenance retainer with a previous client; it doesn't limit my availability.
 - **Email**: [me@viell.dev](mailto:me@viell.dev)
 - **GitHub**: [viell-dev](https://github.com/viell-dev)
 - **Discord**: [viell-dev](https://discord.com/users/310798899738574849)
-- **X**: [@viell88](https://x.com/viell88)
 
 <small>Last updated: July 2026</small>

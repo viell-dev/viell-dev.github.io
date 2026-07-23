@@ -1,5 +1,10 @@
 {
   "extends": "@tsconfig/node24/tsconfig.json",
-  "compilerOptions": { "noEmit": true },
-  "files": [".vitepress/config.ts", "eslint.config.js", "prettier.config.js"]
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "preserve",
+    "moduleResolution": "bundler"
+  },
+  "include": [".vitepress/**/*.ts", "eslint.config.js", "prettier.config.js"],
+  "exclude": [".vitepress/cache", ".vitepress/dist"]
 }

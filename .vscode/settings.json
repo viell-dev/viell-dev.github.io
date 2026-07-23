@@ -2,7 +2,9 @@
   "search.exclude": {
     "**/node_modules": true
   },
-  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "editor.rulers": [100, 120],
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
