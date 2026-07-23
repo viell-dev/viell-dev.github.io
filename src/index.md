@@ -20,9 +20,11 @@ hero:
 # About me
 
 I'm a full-stack developer with over a decade of experience building web products, these days mostly
-TypeScript and Vue, with Rust on the side. I like owning a problem from design to delivery, and the
-puzzle-solving is the part I'm in it for. Off the clock that same itch gets fed by puzzle,
-factory/automation and Pokémon games.
+TypeScript and Vue, with Rust on the side. I like owning a problem from design to delivery.
 
-If you're looking to hire me, the [Hire Me](/hire-me) page has the professional details. A blog and
-a portfolio section are planned.
+At my core, I'm someone who enjoys solving problems. That's what drew me to programming and what
+keeps me at it: programming is puzzle-solving at heart. Off the clock the same nature shows in what
+I play - puzzle, factory/automation and Pokémon games.
+
+If you're looking to hire me, the [Hire Me](/hire-me) page has the professional details, and my
+released projects are on the [Portfolio](/portfolio) page.

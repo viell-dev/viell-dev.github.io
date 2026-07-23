@@ -52,6 +52,8 @@ the company's Linux VPSs single-handedly.
 - **AI-assisted development:** daily hands-on work with coding agents. I write the specifications,
   set the engineering standards, direct the implementation, and review and integrate the results.
 
+Public work backing up the Rust and TypeScript claims is on the [Portfolio](/portfolio) page.
+
 ## Availability
 
 My primary goal is a full-time, hands-on senior developer role on a remote-first team. Alongside
