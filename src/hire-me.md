@@ -4,75 +4,71 @@ title: Hire Me
 
 # Hire Me
 
-Software architect available for flexible, task-based work. Years of experience wearing multiple hats at small businesses have made me a one-person development and operations team.
+I'm a senior full-stack developer with over 11 years of professional experience building and owning
+web products end-to-end. I'm looking for a hands-on senior developer role on a remote-first team,
+and I'm open to consulting and task-based work alongside that.
 
-## What I Do
+I'm a software designer at heart: I do my best work when I own API design, data modelling and domain
+design, and I write in a functional, type-driven style. I've worked fully remote since 2023 and I'm
+comfortable with async collaboration and self-directed delivery.
 
-Through my work at small businesses, I've developed a broad skill set spanning the full stack and beyond:
+## Experience
 
-- **Full-stack development** — from frontend interfaces to backend services
-- **Server administration** — setup, maintenance, and troubleshooting
-- **System architecture** — designing solutions that scale with your needs
-- **DevOps** — CI/CD pipelines, deployment automation
-- **Manual QA** — hands-on testing to find edge cases and break things before users do
-- **Code review** — PR reviews, catching issues early, knowledge sharing
+**2018-2026 - multi-tenant B2B SaaS for interpretation-agency booking and management.** I was the
+sole frontend engineer with end-to-end ownership, and I owned the analytics backend subsystem.
 
-I'm comfortable jumping into unfamiliar codebases, diagnosing issues, and delivering working solutions.
+- Wrote the entire production SPA myself: a Vue + TypeScript application (around 1,000 TypeScript
+  files) serving four user-role portals, including its typed API client, DDD-style domain model with
+  validated value objects, reusable data-grid and form infrastructure, realtime updates over
+  SignalR, and OIDC auth integration.
+- Took over the statistics feature after its first version degraded and crashed the production API.
+  Designed and built the replacement in C#/ASP.NET Core around a dynamic SQL-generation engine:
+  16 metrics, around 74 grouping dimensions, four time granularities, and an optional comparison
+  period, using parameterized (injection-safe) queries, window-function aggregation, and JSON/Excel
+  export.
+- Also handled frontend security, technical documentation, user manuals, and review of GDPR/EU
+  regulatory requirements against the product.
 
-## Technical Skills
+**2015-2018 - primary developer at a small product studio.** Full-stack development plus all
+operations. I built and operated three products end-to-end on a PHP + MariaDB stack: an
+interpretation-assignment booking system sold as per-customer deployed instances, a booking SaaS
+live with 50+ subscribing businesses, and an online grocery-ordering service. I also administered
+the company's Linux VPSs single-handedly.
 
-### Languages
+## Technical skills
 
-- **TypeScript** — my daily driver, haven't written plain JS in years
-- **Rust** — current focus alongside TS
-
-#### Previous experience
-
-C#, PHP (Zend Framework 2/3), Ruby
-
-### Focus Areas
-
-- **Web development** — years of experience in both frontend and backend
-- **Vue.js** — primary frontend framework
-- **Functional TypeScript** — extensive fp-ts experience, currently using Effect
-- I build whatever's needed: CLIs, APIs, frontends
-
-### Infrastructure & Tools
-
-- **Azure**, self-hosted servers, VPS environments
-- **CI/CD pipelines** (GitHub Actions, etc.)
-- **Vagrant** for local development environments
-- **PostgreSQL**, **MySQL/MariaDB**
-
-### Industry Experience
-
-- **B2B SaaS** — cloud booking platforms for interpretation services (multi-party scheduling, billing, communication)
-- **E-commerce** — online foodstore systems
-
-Comfortable with multi-stakeholder platforms where providers, customers, and service workers all interact through one system.
+- **Languages:** TypeScript (advanced: generics, type-level programming, functional style), C#,
+  SQL (T-SQL / ANSI), Rust (personal projects), HTML/CSS. Historical: PHP (Zend Framework 2/3).
+  I'm quick to get productive in unfamiliar languages when a project calls for it.
+- **Frontend:** Vue 2 and Vue 3 (Composition API, Pinia, Vuex), Vuetify, VitePress, fp-ts, Effect,
+  OIDC authentication, SignalR realtime, large-scale SPA architecture and reusable component design.
+- **Backend:** REST API development in C#/ASP.NET Core, dynamic SQL generation, raw (no-ORM) SQL
+  data access, SQL Server window functions, query performance work, Excel export.
+- **Design & practices:** API design, relational schema design, DDD-style domain modelling,
+  type-driven design, unit/integration testing (vitest, cargo test), Git, technical documentation
+  and user manuals, GDPR and EU regulatory review.
+- **Ops & cloud:** Azure, Cloudflare Workers, GitHub Actions, Linux VPS administration
+  (Apache/Nginx, MariaDB), Vagrant.
+- **AI-assisted development:** daily hands-on work with coding agents. I write the specifications,
+  set the engineering standards, direct the implementation, and review and integrate the results.
 
 ## Availability
 
-I have a full-time position, so I'm looking for **flexible, async-friendly arrangements**:
+My primary goal is a full-time, hands-on senior developer role on a remote-first team. Alongside
+that I'm open to flexible arrangements:
 
-- **Issue-based work** — Pick up GitHub issues, fix bugs, implement features
-- **Project contributions** — Part-time involvement on specific projects
-- **Consulting** — Architecture reviews, code audits, technical guidance
+- **Consulting** - architecture reviews, code audits, technical guidance
+- **Issue-based work** - bug fixes and feature work, paid per deliverable
+- **Project contributions** - part-time involvement on specific projects
 
-### Working Style
+I'm based in Sweden (CET/CEST) and work in native-level Swedish and English. I have an on-call
+maintenance retainer with a previous client; it doesn't limit my availability.
 
-- Based in **Central European Time (CET)**
-- Async communication preferred
-- **Bounty-style payments** — pay per deliverable, not hours on the clock
-- No retainers or ongoing commitments required
-
-## Let's Talk
-
-Have a project or issue backlog that needs attention? Reach out:
+## Contact
 
 - **Email**: [me@viell.dev](mailto:me@viell.dev)
 - **GitHub**: [viell-dev](https://github.com/viell-dev)
 - **Discord**: [viell-dev](https://discord.com/users/310798899738574849)
 - **X**: [@viell88](https://x.com/viell88)
 
-<small>Last updated: February 2026</small>
+<small>Last updated: July 2026</small>
