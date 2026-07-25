@@ -41,4 +41,40 @@ Swedish holiday law does.
 The holiday date math is mine, ported from calculations I originally wrote by hand for a work
 project; the Worker plumbing around it was agent-assisted.
 
+## Archived
+
+There's also a decade of older, pre-AI work. Most of it no longer matters, but a few pieces are
+still worth a mention. These repos are archived on GitHub and Codeberg and won't change again.
+
+::: details Older projects (2013 - 2018)
+
+### mb_trim
+
+Userland `mb_trim`, `mb_ltrim` and `mb_rtrim` functions for PHP 5.4, written in 2013.
+PHP had no multibyte-aware trim back then; native versions only arrived in PHP 8.4, over a decade
+later. They work like the regular trim functions but accept an encoding parameter like other `mb_`
+functions. I wrote them for my own use, but being MIT and a single drop-in file, they later ended
+up running in production in software I maintained professionally. An unfinished, configurable
+PHP 5.6 rework from 2015 lives on a branch.
+[GitHub](https://github.com/viell-dev/mb_trim.php) -
+[Codeberg](https://codeberg.org/viell/mb_trim)
+
+### tnebot
+
+A Ruby bot I started in 2014 for a Nintendo forum I was part of. It ran on a schedule
+on a VPS, read the forum's RSS feed, tweeted new entries, and cached what it had already posted in
+SQLite to prevent double-posting. Last touched in early 2015.
+[GitHub](https://github.com/viell-dev/tnebot.rb) -
+[Codeberg](https://codeberg.org/viell/tnebot)
+
+### zf3-hashids
+
+A Zend Framework 3 module for the PHP Hashids library: a fork of the
+unmaintained ZF2 module that I updated for ZF3 in 2018 while upgrading the same production
+software `mb_trim` ran in, adding a view helper and hex encode/decode support along the way.
+[GitHub](https://github.com/viell-dev/zf3-hashids) -
+[Codeberg](https://codeberg.org/viell/zf3-hashids)
+
+:::
+
 <small>Last updated: July 2026</small>

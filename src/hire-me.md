@@ -33,7 +33,9 @@ sole frontend engineer with end-to-end ownership, and I owned the analytics back
 operations. I built and operated three products end-to-end on a PHP + MariaDB stack: an
 interpretation-assignment booking system sold as per-customer deployed instances, a booking SaaS
 live with 50+ subscribing businesses, and an online grocery-ordering service. I also administered
-the company's Linux VPSs single-handedly.
+the company's Linux VPSs single-handedly. The products also ran two of my open-source libraries in
+production: `mb_trim`, a personal library predating the job, and `zf3-hashids`, which I built and
+published as part of their ZF3 upgrade. Both are on the [Portfolio](/portfolio#archived) page.
 
 ## Technical skills
 
