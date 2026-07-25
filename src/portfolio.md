@@ -8,9 +8,9 @@ I always have multiple projects in the works, but I only publish the ones I cons
 feature-complete: a project gets cleaned up and polished before it goes public. So this list is
 short on purpose - these are the released ones, with more on the way. You can find me on:
 
-- **GitHub**: [viell-dev](https://github.com/viell-dev)
 - **Codeberg**: [viell](https://codeberg.org/viell), with my more serious work under the
   [Devious Concepts](https://codeberg.org/Devious-Concepts) namespace
+- **GitHub**: [viell-dev](https://github.com/viell-dev)
 
 ## strata-reader
 

@@ -1,9 +1,10 @@
 import { defineConfig } from "vitepress";
 
 const config = defineConfig({
-  title: "somewhere",
+  title: "viell.dev",
   titleTemplate: ":title @ viell.dev",
-  description: "viell's stuff",
+  description:
+    "Personal website of viell, full-stack developer - portfolio, blog and hiring information.",
   head: [["link", { rel: "icon", href: "/favicon.ico" }]],
   lang: "en-GB",
   cleanUrls: true,
@@ -21,6 +22,7 @@ const config = defineConfig({
         icon: "discord",
         link: "https://discord.com/users/310798899738574849",
       },
+      { icon: "codeberg", link: "https://codeberg.org/viell" },
       { icon: "github", link: "https://github.com/viell-dev" },
     ],
   },
