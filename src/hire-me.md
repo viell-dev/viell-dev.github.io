@@ -24,7 +24,7 @@ sole frontend engineer with end-to-end ownership, and I owned the analytics back
 - Took over the statistics feature after its first version degraded and crashed the production API.
   Designed and built the replacement in C#/ASP.NET Core around a dynamic SQL-generation engine:
   16 metrics, around 74 grouping dimensions, four time granularities, and an optional comparison
-  period, using parameterized (injection-safe) queries, window-function aggregation, and JSON/Excel
+  period, using parameterised (injection-safe) queries, window-function aggregation, and JSON/Excel
   export.
 - Also handled frontend security, technical documentation, user manuals, and review of GDPR/EU
   regulatory requirements against the product.
@@ -65,7 +65,7 @@ that I'm open to flexible arrangements:
 - **Issue-based work** - bug fixes and feature work, paid per deliverable
 - **Project contributions** - part-time involvement on specific projects
 
-I'm based in Sweden (CET/CEST) and work in native-level Swedish and English. I have an on-call
+I'm based in Sweden (CET/CEST) and work at a native level in both Swedish and English. I have an on-call
 maintenance retainer with a previous client; it doesn't limit my availability.
 
 ## Contact

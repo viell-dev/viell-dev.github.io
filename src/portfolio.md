@@ -33,7 +33,8 @@ A TypeScript Cloudflare Worker serving a subscribable iCal calendar of Swedish p
 and the source is on [GitHub](https://github.com/viell-dev/swedish-red-days).
 
 The holidays follow Swedish law exactly, including the 2005 change where National Day replaced Whit
-Monday: every year the calendar emits uses the holiday rules that were legally in force that year.
+Monday: for every year it emits, the calendar uses the holiday rules that were legally in force
+that year.
 Easter is calculated with the anonymous Gregorian computus, and events carry stable UIDs so
 subscriptions don't duplicate on refresh. This one is effectively final: it only needs to change if
 Swedish holiday law does.
@@ -53,9 +54,9 @@ still worth a mention. These repos are archived on GitHub and Codeberg and won't
 Userland `mb_trim`, `mb_ltrim` and `mb_rtrim` functions for PHP 5.4, written in 2013.
 PHP had no multibyte-aware trim back then; native versions only arrived in PHP 8.4, over a decade
 later. They work like the regular trim functions but accept an encoding parameter like other `mb_`
-functions. I wrote them for my own use, but being MIT and a single drop-in file, they later ended
-up running in production in software I maintained professionally. An unfinished, configurable
-PHP 5.6 rework from 2015 lives on a branch.
+functions. I wrote them for my own use, but being MIT-licensed and a single drop-in file, they
+later ended up running in production in software I maintained professionally. An unfinished,
+configurable PHP 5.6 rework from 2015 lives on a branch.
 [GitHub](https://github.com/viell-dev/mb_trim.php) -
 [Codeberg](https://codeberg.org/viell/mb_trim)
 
