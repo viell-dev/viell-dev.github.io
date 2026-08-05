@@ -54,6 +54,14 @@ const overflowing = ref(false);
 const taskInfo = ref<TaskListInfo | null>(null);
 const taskStates = ref<boolean[]>([]);
 
+const tasksModified = computed(() => {
+  const info = taskInfo.value;
+  return (
+    info !== null &&
+    taskStates.value.some((state, index) => state !== info.states[index])
+  );
+});
+
 const rootEl = ref<HTMLElement | null>(null);
 const contentEl = ref<HTMLElement | null>(null);
 const bodyId = useId();
@@ -267,6 +275,10 @@ function download() {
         </button>
       </div>
     </figcaption>
+    <p v-if="tasksModified" class="gist-warning" role="status">
+      Your checks are saved only in this browser and will be lost if the gist is
+      updated. Use Download to keep your current version.
+    </p>
     <div :id="bodyId" class="gist-body" :class="{ expanded }">
       <div ref="contentEl" class="gist-content" @change="onContentChange">
         <p v-if="loading" class="gist-status">Loading gist…</p>
@@ -361,6 +373,16 @@ function download() {
   padding: 16px;
   font-size: 14px;
   color: var(--vp-c-text-2);
+}
+
+.gist-warning {
+  margin: 0;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--vp-c-yellow-1);
+  background-color: var(--vp-c-yellow-soft);
 }
 
 .gist-error {
