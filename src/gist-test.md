@@ -19,6 +19,14 @@ Temporary page for manually testing the `GistFile` component. Not linked from an
 
 <GistFile id="da307e64d58e55d7c709a9ba7d066e78" file="TEST.md" />
 
+## Checklist mode (mutable checkboxes, persisted)
+
+<GistFile id="da307e64d58e55d7c709a9ba7d066e78" file="TEST.md" checklist />
+
+## Expanded by default
+
+<GistFile id="edc98075cd1d1caa3ad93b094dd88860" file="en_SE" expanded />
+
 ## Missing file (error state)
 
 <GistFile id="edc98075cd1d1caa3ad93b094dd88860" file="does-not-exist.txt" />
