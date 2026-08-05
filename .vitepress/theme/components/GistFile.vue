@@ -77,9 +77,17 @@ onMounted(() => {
   if (contentEl.value) {
     observer.observe(contentEl.value);
   }
+  // "storage" covers other tabs; the custom event covers other instances of
+  // the same gist on this page, which would otherwise clobber each other.
+  window.addEventListener("storage", onStorageSync);
+  window.addEventListener(taskSyncEvent, onStorageSync);
 });
 
-onUnmounted(() => observer?.disconnect());
+onUnmounted(() => {
+  observer?.disconnect();
+  window.removeEventListener("storage", onStorageSync);
+  window.removeEventListener(taskSyncEvent, onStorageSync);
+});
 
 async function toggle() {
   expanded.value = !expanded.value;
@@ -102,6 +110,7 @@ onMounted(async () => {
       if (isMarkdownFile(props.file)) {
         renderedHtml.value = await renderMarkdown(content, {
           enableTaskCheckboxes: props.persistent,
+          docId: bodyId,
         });
         mode.value = "markdown";
       } else {
@@ -126,7 +135,7 @@ onMounted(async () => {
     try {
       await setUpChecklist(fileContent.value);
     } catch {
-      // The checklist stays inert; the rendered markdown is unaffected.
+      disableTaskCheckboxes();
     }
   }
 });
@@ -139,21 +148,67 @@ function checkboxes(): HTMLInputElement[] {
   ];
 }
 
+/**
+ * Fallback when checklist setup fails: interactive-looking checkboxes whose
+ * changes are neither saved nor downloadable would mislead, so make them
+ * read-only like a non-persistent gist.
+ */
+function disableTaskCheckboxes() {
+  checkboxes().forEach((box) => {
+    box.disabled = true;
+  });
+}
+
+/** The item text following the checkbox, excluding any nested lists. */
+function taskLabel(box: HTMLInputElement): string {
+  let text = "";
+  for (let node = box.nextSibling; node; node = node.nextSibling) {
+    if (node.nodeName === "UL" || node.nodeName === "OL") {
+      break;
+    }
+    text += node.textContent ?? "";
+  }
+  return text.trim();
+}
+
 async function setUpChecklist(content: string): Promise<void> {
   const info = await parseTaskList(content);
   await nextTick();
   const boxes = checkboxes();
   // A count mismatch means the source scan does not map onto the rendered
-  // checkboxes (should not happen); leave the checklist inert rather than
-  // rewrite the wrong lines.
+  // checkboxes (should not happen); do not risk rewriting the wrong lines.
   if (info.states.length === 0 || boxes.length !== info.states.length) {
+    disableTaskCheckboxes();
     return;
   }
   taskInfo.value = info;
   taskStates.value = restoreTaskStates(info, content);
   boxes.forEach((box, index) => {
     box.checked = taskStates.value[index] ?? false;
+    box.setAttribute("aria-label", taskLabel(box) || "Task item");
   });
+}
+
+const taskSyncEvent = "gist-tasks-sync";
+
+function onStorageSync(event: Event) {
+  const key =
+    event instanceof StorageEvent
+      ? event.key
+      : (event as CustomEvent<string>).detail;
+  if (key !== storageKey.value || !taskInfo.value || !fileContent.value) {
+    return;
+  }
+  taskStates.value = restoreTaskStates(taskInfo.value, fileContent.value);
+  checkboxes().forEach((box, index) => {
+    box.checked = taskStates.value[index] ?? false;
+  });
+}
+
+function notifyTaskSync() {
+  window.dispatchEvent(
+    new CustomEvent(taskSyncEvent, { detail: storageKey.value }),
+  );
 }
 
 function restoreTaskStates(info: TaskListInfo, content: string): boolean[] {
@@ -187,6 +242,7 @@ function persistTaskStates() {
   } catch {
     // Storage may be full or blocked; checks still apply for this visit.
   }
+  notifyTaskSync();
 }
 
 function onContentChange(event: Event) {
@@ -219,6 +275,7 @@ function resetTasks() {
   } catch {
     // Ignore; the visible states are already reset.
   }
+  notifyTaskSync();
 }
 
 function download() {
@@ -235,8 +292,11 @@ function download() {
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = props.file;
+  document.body.appendChild(anchor);
   anchor.click();
-  URL.revokeObjectURL(url);
+  anchor.remove();
+  // Revoking synchronously can cancel the download in some browsers.
+  setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }
 </script>
 
