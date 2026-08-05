@@ -174,6 +174,11 @@ export function isMarkdownFile(filename: string): boolean {
 export interface RenderMarkdownOptions {
   /** Render task-list checkboxes without the disabled attribute. */
   enableTaskCheckboxes?: boolean;
+  /**
+   * Unique id mixed into footnote anchors so several rendered documents on
+   * one page do not link to each other's footnotes.
+   */
+  docId?: string;
 }
 
 export async function renderMarkdown(
@@ -249,7 +254,7 @@ export async function renderMarkdown(
       },
     });
   }
-  return markdown.render(content);
+  return markdown.render(content, { docId: options?.docId });
 }
 
 export interface TaskListInfo {
@@ -262,11 +267,15 @@ export interface TaskListInfo {
 /**
  * Finds task-list items using the same token shape and content checks as
  * markdown-it-task-lists, so the result maps one-to-one onto the rendered
- * checkboxes.
+ * checkboxes. The footnote plugin is included because footnote definitions
+ * can contain task lists that only tokenize with it present.
  */
 export async function parseTaskList(content: string): Promise<TaskListInfo> {
-  const { default: MarkdownIt } = await import("markdown-it");
-  const tokens = new MarkdownIt().parse(content, {});
+  const [{ default: MarkdownIt }, { default: footnote }] = await Promise.all([
+    import("markdown-it"),
+    import("markdown-it-footnote"),
+  ]);
+  const tokens = new MarkdownIt().use(footnote).parse(content, {});
   const info: TaskListInfo = { lines: [], states: [] };
   for (let i = 2; i < tokens.length; i++) {
     const token = tokens[i];
