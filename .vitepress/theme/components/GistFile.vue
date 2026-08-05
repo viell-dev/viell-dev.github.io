@@ -10,6 +10,8 @@ const props = defineProps<{
   file: string;
   /** Gist owner; defaults to the site author. */
   user?: string;
+  /** Start expanded instead of collapsed. */
+  expanded?: boolean;
 }>();
 
 type RenderMode = "plain" | "markdown" | "code";
@@ -31,7 +33,7 @@ const error = ref<string | null>(null);
 const fileContent = ref<string | null>(null);
 const mode = ref<RenderMode>("plain");
 const renderedHtml = ref("");
-const expanded = ref(false);
+const expanded = ref(props.expanded);
 const overflowing = ref(false);
 
 const rootEl = ref<HTMLElement | null>(null);
