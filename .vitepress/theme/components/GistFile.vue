@@ -277,7 +277,8 @@ function download() {
     </figcaption>
     <p v-if="tasksModified" class="gist-warning" role="status">
       Your checks are saved only in this browser and will be lost if the gist is
-      updated. Use Download to keep your current version.
+      updated.<br />
+      Use Download to keep your current version.
     </p>
     <div :id="bodyId" class="gist-body" :class="{ expanded }">
       <div ref="contentEl" class="gist-content" @change="onContentChange">
