@@ -5,6 +5,7 @@
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
+    "test": "vitest run",
     "lint": "run-s lint:eslint lint:prettier",
     "lint:eslint": "eslint --fix .",
     "lint:prettier": "prettier . --write --log-level=warn --cache"
@@ -34,6 +35,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0",
     "vitepress": "^1.6.4",
+    "vitest": "^3.2.7",
     "vue": "^3.5.40"
   }
 }
