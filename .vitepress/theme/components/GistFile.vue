@@ -24,7 +24,7 @@ const props = defineProps<{
    * Make markdown task-list checkboxes interactive. Each visitor's checks are
    * kept in localStorage and restored on return; Download reflects them.
    */
-  checklist?: boolean;
+  persistent?: boolean;
 }>();
 
 type RenderMode = "plain" | "markdown" | "code";
@@ -101,7 +101,7 @@ onMounted(async () => {
     try {
       if (isMarkdownFile(props.file)) {
         renderedHtml.value = await renderMarkdown(content, {
-          enableTaskCheckboxes: props.checklist,
+          enableTaskCheckboxes: props.persistent,
         });
         mode.value = "markdown";
       } else {
@@ -122,7 +122,7 @@ onMounted(async () => {
   }
   // Only after loading flips does the markdown (and its checkboxes) enter the
   // DOM, so the checklist must be set up after the states above settle.
-  if (props.checklist && mode.value === "markdown" && fileContent.value) {
+  if (props.persistent && mode.value === "markdown" && fileContent.value) {
     try {
       await setUpChecklist(fileContent.value);
     } catch {

@@ -21,7 +21,7 @@ Temporary page for manually testing the `GistFile` component. Not linked from an
 
 ## Checklist mode (mutable checkboxes, persisted)
 
-<GistFile id="da307e64d58e55d7c709a9ba7d066e78" file="TEST.md" checklist />
+<GistFile id="da307e64d58e55d7c709a9ba7d066e78" file="TEST.md" persistent />
 
 ## Expanded by default
 
