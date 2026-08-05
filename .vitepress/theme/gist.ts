@@ -171,7 +171,15 @@ export function isMarkdownFile(filename: string): boolean {
   return /\.(?:md|markdown|mdown|mkdn?)$/i.test(filename);
 }
 
-export async function renderMarkdown(content: string): Promise<string> {
+export interface RenderMarkdownOptions {
+  /** Render task-list checkboxes without the disabled attribute. */
+  enableTaskCheckboxes?: boolean;
+}
+
+export async function renderMarkdown(
+  content: string,
+  options?: RenderMarkdownOptions,
+): Promise<string> {
   const [
     { default: MarkdownIt },
     { default: footnote },
@@ -190,16 +198,14 @@ export async function renderMarkdown(content: string): Promise<string> {
       default: (md: MarkdownIt) => void;
     }>,
   ]);
-  const markdown = new MarkdownIt({ html: false, linkify: true })
-    .use(footnote)
-    .use(taskLists)
-    .use(emoji)
-    .use(githubAlerts);
 
-  // markdown-it's highlight hook is synchronous, so collect the fence
-  // languages up front and load their grammars before rendering.
+  // markdown-it's highlight hook is synchronous, so scan the fences with a
+  // bare instance and load their grammars up front. This must happen before
+  // use() below: markdown-it-task-lists keeps its options in module state, so
+  // awaiting between use() and render() would let a concurrently rendering
+  // component's options win.
   const fenceLanguages = new Set<string>();
-  for (const token of markdown.parse(content, {})) {
+  for (const token of new MarkdownIt().parse(content, {})) {
     if (token.type === "fence") {
       const id = grammarIdFor(token.info.trim().split(/\s+/)[0] ?? "");
       if (id) {
@@ -207,20 +213,35 @@ export async function renderMarkdown(content: string): Promise<string> {
       }
     }
   }
+  let highlighter: HighlighterCore | undefined;
   if (fenceLanguages.size > 0) {
-    const highlighter = await getHighlighter();
+    highlighter = await getHighlighter();
+    const loaded = highlighter;
     await Promise.all(
-      [...fenceLanguages].map((language) =>
-        ensureLanguage(highlighter, language),
-      ),
+      [...fenceLanguages].map((language) => ensureLanguage(loaded, language)),
     );
+  }
+
+  const markdown = new MarkdownIt({ html: false, linkify: true })
+    .use(footnote)
+    // Always pass the full options: the plugin's module state keeps whatever
+    // the previous caller set.
+    .use(taskLists, {
+      enabled: options?.enableTaskCheckboxes ?? false,
+      label: false,
+      labelAfter: false,
+    })
+    .use(emoji)
+    .use(githubAlerts);
+  if (highlighter) {
+    const loaded = highlighter;
     markdown.set({
       highlight: (code, fenceName) => {
         const id = grammarIdFor(fenceName);
-        if (!id || !highlighter.getLoadedLanguages().includes(id)) {
+        if (!id || !loaded.getLoadedLanguages().includes(id)) {
           return "";
         }
-        return highlighter.codeToHtml(code, {
+        return loaded.codeToHtml(code, {
           lang: id,
           themes: shikiThemes,
           defaultColor: false,
@@ -229,6 +250,63 @@ export async function renderMarkdown(content: string): Promise<string> {
     });
   }
   return markdown.render(content);
+}
+
+export interface TaskListInfo {
+  /** Source line index of each checkbox, in document order. */
+  lines: number[];
+  /** Source checked state of each checkbox. */
+  states: boolean[];
+}
+
+/**
+ * Finds task-list items using the same token shape and content checks as
+ * markdown-it-task-lists, so the result maps one-to-one onto the rendered
+ * checkboxes.
+ */
+export async function parseTaskList(content: string): Promise<TaskListInfo> {
+  const { default: MarkdownIt } = await import("markdown-it");
+  const tokens = new MarkdownIt().parse(content, {});
+  const info: TaskListInfo = { lines: [], states: [] };
+  for (let i = 2; i < tokens.length; i++) {
+    const token = tokens[i];
+    if (
+      token.type === "inline" &&
+      tokens[i - 1].type === "paragraph_open" &&
+      tokens[i - 2].type === "list_item_open" &&
+      /^\[[ xX]\] /.test(token.content)
+    ) {
+      info.lines.push(token.map?.[0] ?? tokens[i - 1].map?.[0] ?? -1);
+      info.states.push(token.content[1] !== " ");
+    }
+  }
+  return info;
+}
+
+/** Rewrites the task markers in the markdown source to the given states. */
+export function applyTaskStates(
+  content: string,
+  info: TaskListInfo,
+  states: boolean[],
+): string {
+  const lines = content.split("\n");
+  info.lines.forEach((line, index) => {
+    const state = states[index];
+    if (line < 0 || line >= lines.length || state === undefined) {
+      return;
+    }
+    lines[line] = lines[line].replace(/\[[ xX]\]/, state ? "[x]" : "[ ]");
+  });
+  return lines.join("\n");
+}
+
+/** Cheap stable hash used to invalidate stored states when a gist changes. */
+export function contentHash(content: string): string {
+  let hash = 5381;
+  for (let i = 0; i < content.length; i++) {
+    hash = ((hash << 5) + hash + content.charCodeAt(i)) | 0;
+  }
+  return hash.toString(36);
 }
 
 /** Returns highlighted HTML, or null when the language is not recognised. */

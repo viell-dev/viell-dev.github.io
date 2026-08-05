@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, useId } from "vue";
 
-import { highlightCode, isMarkdownFile, renderMarkdown } from "../gist";
+import {
+  applyTaskStates,
+  contentHash,
+  highlightCode,
+  isMarkdownFile,
+  parseTaskList,
+  renderMarkdown,
+  type TaskListInfo,
+} from "../gist";
 
 const props = defineProps<{
   /** Gist id, e.g. "403b3a9b6b52156e5d65a13279d7f637". */
@@ -12,6 +20,11 @@ const props = defineProps<{
   user?: string;
   /** Start expanded instead of collapsed. */
   expanded?: boolean;
+  /**
+   * Make markdown task-list checkboxes interactive. Each visitor's checks are
+   * kept in localStorage and restored on return; Download reflects them.
+   */
+  checklist?: boolean;
 }>();
 
 type RenderMode = "plain" | "markdown" | "code";
@@ -24,6 +37,9 @@ const rawUrl = computed(
   () =>
     `https://gist.githubusercontent.com/${user.value}/${props.id}/raw/${encodeURIComponent(props.file)}`,
 );
+const storageKey = computed(
+  () => `gist-tasks:${user.value}/${props.id}/${props.file}`,
+);
 
 const collapsedHeight = 480;
 const collapsedMaxHeight = `${collapsedHeight}px`;
@@ -35,6 +51,8 @@ const mode = ref<RenderMode>("plain");
 const renderedHtml = ref("");
 const expanded = ref(props.expanded);
 const overflowing = ref(false);
+const taskInfo = ref<TaskListInfo | null>(null);
+const taskStates = ref<boolean[]>([]);
 
 const rootEl = ref<HTMLElement | null>(null);
 const contentEl = ref<HTMLElement | null>(null);
@@ -74,7 +92,9 @@ onMounted(async () => {
     fileContent.value = content;
     try {
       if (isMarkdownFile(props.file)) {
-        renderedHtml.value = await renderMarkdown(content);
+        renderedHtml.value = await renderMarkdown(content, {
+          enableTaskCheckboxes: props.checklist,
+        });
         mode.value = "markdown";
       } else {
         const highlighted = await highlightCode(props.file, content);
@@ -92,13 +112,115 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
+  // Only after loading flips does the markdown (and its checkboxes) enter the
+  // DOM, so the checklist must be set up after the states above settle.
+  if (props.checklist && mode.value === "markdown" && fileContent.value) {
+    try {
+      await setUpChecklist(fileContent.value);
+    } catch {
+      // The checklist stays inert; the rendered markdown is unaffected.
+    }
+  }
 });
+
+function checkboxes(): HTMLInputElement[] {
+  return [
+    ...(contentEl.value?.querySelectorAll<HTMLInputElement>(
+      "input.task-list-item-checkbox",
+    ) ?? []),
+  ];
+}
+
+async function setUpChecklist(content: string): Promise<void> {
+  const info = await parseTaskList(content);
+  await nextTick();
+  const boxes = checkboxes();
+  // A count mismatch means the source scan does not map onto the rendered
+  // checkboxes (should not happen); leave the checklist inert rather than
+  // rewrite the wrong lines.
+  if (info.states.length === 0 || boxes.length !== info.states.length) {
+    return;
+  }
+  taskInfo.value = info;
+  taskStates.value = restoreTaskStates(info, content);
+  boxes.forEach((box, index) => {
+    box.checked = taskStates.value[index] ?? false;
+  });
+}
+
+function restoreTaskStates(info: TaskListInfo, content: string): boolean[] {
+  try {
+    const raw = localStorage.getItem(storageKey.value);
+    if (raw) {
+      const saved = JSON.parse(raw) as { hash?: string; states?: unknown };
+      if (
+        saved.hash === contentHash(content) &&
+        Array.isArray(saved.states) &&
+        saved.states.length === info.states.length
+      ) {
+        return saved.states.map(Boolean);
+      }
+    }
+  } catch {
+    // Broken or blocked storage; fall through to the source states.
+  }
+  return [...info.states];
+}
+
+function persistTaskStates() {
+  try {
+    localStorage.setItem(
+      storageKey.value,
+      JSON.stringify({
+        hash: contentHash(fileContent.value ?? ""),
+        states: taskStates.value,
+      }),
+    );
+  } catch {
+    // Storage may be full or blocked; checks still apply for this visit.
+  }
+}
+
+function onContentChange(event: Event) {
+  const target = event.target;
+  if (
+    !taskInfo.value ||
+    !(target instanceof HTMLInputElement) ||
+    !target.classList.contains("task-list-item-checkbox")
+  ) {
+    return;
+  }
+  const index = checkboxes().indexOf(target);
+  if (index < 0) {
+    return;
+  }
+  taskStates.value[index] = target.checked;
+  persistTaskStates();
+}
+
+function resetTasks() {
+  if (!taskInfo.value) {
+    return;
+  }
+  taskStates.value = [...taskInfo.value.states];
+  checkboxes().forEach((box, index) => {
+    box.checked = taskStates.value[index] ?? false;
+  });
+  try {
+    localStorage.removeItem(storageKey.value);
+  } catch {
+    // Ignore; the visible states are already reset.
+  }
+}
 
 function download() {
   if (fileContent.value === null) {
     return;
   }
-  const blob = new Blob([fileContent.value], {
+  const content = taskInfo.value
+    ? applyTaskStates(fileContent.value, taskInfo.value, taskStates.value)
+    : fileContent.value;
+  const blob = new Blob([content], {
     type: "text/plain;charset=utf-8",
   });
   const url = URL.createObjectURL(blob);
@@ -117,6 +239,14 @@ function download() {
         {{ props.file }}
       </a>
       <div class="gist-actions">
+        <button
+          v-if="taskInfo"
+          class="gist-button"
+          type="button"
+          @click="resetTasks"
+        >
+          Reset
+        </button>
         <button
           v-if="fileContent !== null && overflowing"
           class="gist-button"
@@ -138,7 +268,7 @@ function download() {
       </div>
     </figcaption>
     <div :id="bodyId" class="gist-body" :class="{ expanded }">
-      <div ref="contentEl" class="gist-content">
+      <div ref="contentEl" class="gist-content" @change="onContentChange">
         <p v-if="loading" class="gist-status">Loading gist…</p>
         <p v-else-if="error" class="gist-status gist-error">
           Failed to load gist: {{ error }}
@@ -274,6 +404,10 @@ function download() {
 
 .gist-markdown :deep(.task-list-item-checkbox) {
   margin-right: 6px;
+}
+
+.gist-markdown :deep(.task-list-item.enabled .task-list-item-checkbox) {
+  cursor: pointer;
 }
 
 .gist-markdown :deep(.markdown-alert) {
